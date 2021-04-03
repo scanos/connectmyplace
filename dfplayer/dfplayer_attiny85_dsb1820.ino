@@ -61,7 +61,13 @@ data[i] = TemperatureSensor.read();
 raw = (data[1] << 8) | data[0];
 t = (float)raw / 16.0;
 ti = (int) t;
+    myDFPlayer.play(ti);  //Play next mp3 every 3 second.
+  }
 
+  if (myDFPlayer.available()) {
+    //printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
+  myDFPlayer.readType(), myDFPlayer.read();  
+   }
 //Serial.print(" temp");Serial.println(ti);
 delay (5000);
 /* 30 seconds */
