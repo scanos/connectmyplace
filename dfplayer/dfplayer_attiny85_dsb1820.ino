@@ -59,7 +59,6 @@ void loop()
   if (myDFPlayer.available()) {
     //printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
   myDFPlayer.readType(), myDFPlayer.read();
-  
-   }
+     }
 }
 
