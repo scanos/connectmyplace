@@ -49,7 +49,7 @@ ti = (int) t;
 
 Serial.print(" temp");Serial.println(ti);
 delay (5000);
-// 30 seconds
+/* 30 seconds */
 
 }
 
