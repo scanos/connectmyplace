@@ -1,3 +1,7 @@
+This is a bash script which publishes a 5 day weather forecast page to your intranet and internet simultaneously
+![image](https://user-images.githubusercontent.com/29405761/114322281-29a27d80-9b17-11eb-9409-09033cc4f92b.png)
+
+
 This shows how to extract data from the Openweathermap cities files which are stored in json format
 
 In particular, we will look at city.list.json which has over 200k entries about towns and cities all over the world
