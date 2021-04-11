@@ -5,6 +5,9 @@ OpenWeatherMap api credentials
 
 To install
 Download the script ow_weather_alert.sh from Github and save it to a secure directory on your local network , not internet.
+You have to change the following settings ow_weather_alert.sh
+  OpenweatherMap API credentials
+  SCP IP address and user/credentials
 In the same directory copy weather_header.html
 Create a web page weather.html (containing any word as it will be overwritten) in your home directory where the script will be located , and copy it to webroot on your intranet and internet site, ensuring that the intranet and internet copies of  /var/www/html/weather.html must be have the following permissions
 #-rwxr-xr-x 1 pi           www-data         6023 Apr 11 20:00 weather.html
