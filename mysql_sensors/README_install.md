@@ -1,7 +1,15 @@
-First creat the tables
-devices
-sensors
-sensor data
+# Install MySQL and TABLES
+1) sudo apt update
+2) sudo apt upgrade
+3) sudo apt install mariadb-server
+4) sudo mysql_secure_installation
+5) mysql -uroot -p
+6) CREATE DATABASE PROJECTS
+7) CREATE USER 'deleteme_insecure'@'localhost' IDENTIFIED BY 'deleteme_insecure';
+8) GRANT ALL PRIVILEGES ON projects.* TO 'deleteme_insecure'@'localhost';
+9) CREATE TABLES
+
+
 
 -- Table structure for table `devices`
 --
@@ -67,40 +75,44 @@ CREATE TABLE `sensor_data` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7531 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-#################################### (A) select summary from sensor data table 
+# Set up and test query 1 to select summary information from sensor data table 
 MariaDB [projects]> SELECT sensors.description,date(sensor_data.reg_date) as sdate,sensor_data.id_text,count(sensor_data.id) as scount,format(AVG(sensor_value),1) as savg,max(sensor_value) as smax,min(sensor_value)as smin from sensor_data inner join sensors on sensors.id_text = sensor_data.id_text where datediff(date(sensor_data.reg_date),DATE_SUB(CURDATE(), INTERVAL 1 DAY)) = 0 group by sensor_data.id_text;
-+------------------------+------------+-------------------------+--------+------+------+------+
+
 | description            | sdate      | id_text                 | scount | savg | smax | smin |
-+------------------------+------------+-------------------------+--------+------+------+------+
 | Tasmota_Greenhouse     | 2021-05-03 | tasmota_03CA1DDS18B20   |      4 | 14.2 | 14.9 | 13.6 |
-| Compost 3 2nd May 2021 | 2021-05-03 | tasmota_4C7759DS18B20-1 |      7 | 6.4  |  9.1 |  4.4 |
-| Greenhouse             | 2021-05-03 | tasmota_4C7759DS18B20-2 |      8 | 10.0 |   21 |  6.8 |
-+------------------------+------------+-------------------------+--------+------+------+------+
-3 rows in set (0.00 sec)
-################################### (A) select summary from sensor data table
 
 
-############(B) select summary from sensor data table and insert into summary table which I used for procedure
+
+
+# Set up and test query 2 from expanding query 1 to select summary information from sensor data table and insert into summary table
 insert into summary_sensors (description,sdate,id_text,scount,savg,smax,smin) SELECT sensors.description,date(sensor_data.reg_date) as sdate,sensor_data.id_text,count(sensor_data.id) as scount,format(AVG(sensor_value),1) as savg,max(sensor_value) as smax,min(sensor_value)as smin from sensor_data inner join sensors on sensors.id_text = sensor_data.id_text where datediff(date(sensor_data.reg_date),DATE_SUB(CURDATE(), INTERVAL 1 DAY)) = 0 group by sensor_data.id_text;
-############(B) select summary from sensor data table and insert into summary table which I used for procedure
 
 
-##########(C)procedure using sql query above - and delete yesterday's data from sensor dataworks
+# Create procedure 1 by expanding query 2 to include deleting information in the sensor data table after it had been sent to the summary table
 delimiter //
 
 CREATE PROCEDURE yesterdays_summary (IN con CHAR(20)) BEGIN insert into summary_sensors (description,sdate,id_text,scount,savg,smax,smin) SELECT sensors.description,date(sensor_data.reg_date) as sdate,sensor_data.id_text,count(sensor_data.id) as scount,format(AVG(sensor_value),1) as savg,max(sensor_value) as smax,min(sensor_value)as smin from sensor_data inner join sensors on sensors.id_text = sensor_data.id_text where datediff(date(sensor_data.reg_date),DATE_SUB(CURDATE(), INTERVAL 1 DAY)) = 0 group by sensor_data.id_text; SELECT SLEEP(1); delete from sensor_data where datediff(date(reg_date),DATE_SUB(CURDATE(), INTERVAL 1 DAY)) = 0; END//
-###########(C)procedure using sql query above - works
 
 
-##################(D) - schedule to call yesterday's summary daily - tried this and worked but duplicate might be other event which i removed
+
+# Create an event to run procedure 1 on a daily basis
 CREATE EVENT daily_summary ON SCHEDULE EVERY '1' DAY STARTS '2012-05-05 1:00:00' DO CALL yesterdays_summary('');END
 ##################(D) - schedule to call yesterday's summary daily - tried this and worked but duplicate might be other event which i removed
 
-POINTS TO NOTE 
-id_text must be set as primary key in devices table
+# POINTS TO NOTE 
+## id_text must be set as primary key in devices table 
 alter table devices ADD CONSTRAINT main_id PRIMARY KEY (`id_text`);
-then during autodiscovery the 'insert ignore' construct prevents duplicte device records
+then during autodiscovery the 'insert ignore' construct prevents duplicate device records
 insert ignore into projects.devices (description,ipaddress,id_text) values ("tasmota_4C7759-5977","192.168.8.114","tasmota_4C7759");
 
+## To populate the sensor_data table automatically, there are a number of options
+### e.g. for Openweathermap data use curl and jq in a bash script then 
+
+testweather=$(sudo curl "https://api.openweathermap.org/data/2.5/weather?lat=<YOUR_LATITUDE>&lon=<YOUR LONGITUDE>&APPID=<YOUR APP_ID>")
+weather_main=$(echo $testweather | jq '.weather[].main')
+echo weather_main $weather_main
+outside_temp=$(echo $testweather | jq '.main.temp')
+outside_temp=$(echo $outside_temp - 273.15 | bc)
+echo "outside_temp" $outside_temp
 
 
