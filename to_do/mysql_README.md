@@ -7,6 +7,9 @@ CREATE TABLE todo (
     status tinyint default 0,
     PRIMARY KEY (id)
 );
+also add the following to prevent duplicate entries
+alter table todo add constraint Value1_Value2_ConstraintKey unique(description,reg_date);
+
 sample output
 MariaDB [projects]> insert into todo (description,responsible) values ('weed side garden','sk');
 Query OK, 1 row affected (0.019 sec)
