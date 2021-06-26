@@ -1,0 +1,107 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+function setCookie(cname,cvalue,exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie() {
+  var user=getCookie("username");
+  if (user != "") {
+    //alert("Welcome again " + user);
+  } else {
+//     user = prompt("Please enter your name:","");
+//     if (user != "" && user != null) {
+//       setCookie("username", user, 30);
+alert("You need to log in ");
+location.href = 'index.sh';
+//     }
+  }
+}
+</script>
+
+
+
+ <script>
+
+$(function () {
+            $("#datepicker").datepicker({ dateFormat: "dd-mm-yy", changeMonth: true, changeYear: true }).datepicker("setDate", "0");
+        });
+
+$(function () {
+            $("#datepicker2").datepicker({ dateFormat: "dd-mm-yy", changeMonth: true, changeYear: true });
+
+//$("#datepicker2").datepicker({ dateFormat: "dd-mm-yy"}).datepicker("setDate", "");
+
+        });
+
+
+  </script>
+
+
+
+
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+       
+
+
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">BotaniHubPi</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="ITSM_view_tasks.sh">Home</a></li>
+         <li><a href="ITSM_view_tasks.sh">Tasks</a></li>
+         <li><a href="plant_charts.sh">Charts</a></li>
+         <li><a href="temperaturealerts.sh">Alerts</a></li>
+      <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Weather <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="rainfall.php">Rainfall</a></li>
+            <li><a href="http://www.botanihub.co.uk/testforecast.html">forecast</a></li>
+          </ul>
+        </li>
+        <li><a href="plant_view_events.sh">Contact Us</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="logout.sh"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
