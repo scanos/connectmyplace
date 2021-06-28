@@ -1,3 +1,6 @@
+VERY IMPT need to reset MAX upload size in php ini to greater than the default of 2M
+sudo find / -name php.ini
+
 PHP files image upload using JS PHP and imagemagick
 to install imagemagick on a pi
 sudo apt install imagemagick
