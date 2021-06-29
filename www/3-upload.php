@@ -25,7 +25,7 @@ fclose($fp);
 echo move_uploaded_file($source, "$file_dir/".$destination) ? "OK" : "ERROR UPLOADING";
 $changed_file="$file_dir/".$destination;
 
-putenv('PATH=/usr/bin/');
+putenv('PATH=/usr/local/bin/');
 //
 
 $image_size=shell_exec("identify -format '%wx%h' $changed_file");
