@@ -55,7 +55,7 @@ do
 	if (( $lengthdateint > 1)); then
 		D1=$mydate; D2=$END
 		datetext=$(echo "$(((D2-D1)/86400)):$(date -u -d@$((D2-D1)) +%H:%M)")
-		sudo echo  "<tr style='background-color:#FF0000'><td> $dateint $myhost $myip </td><td>$datetext (d:hh:mm)</td>" >> /var/www/html/live_ipaddress.html
+		sudo echo  "<tr style='background-color:#FF0000'><td>$myhost $myip </td><td>$datetext (d:hh:mm)</td>" >> /var/www/html/live_ipaddress.html
 	else
 		sudo echo "<tr><td>$myhost $myip</td><td> 0 mins </td>">> /var/www/html/live_ipaddress.html
 	fi
