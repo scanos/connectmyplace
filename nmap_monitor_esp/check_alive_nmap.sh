@@ -49,15 +49,19 @@ do
 	myip=$(IFS=" " read -ra ADDR <<< "${line}"; echo ${ADDR[2]})
 	myhost=$(IFS=" " read -ra ADDR <<< "${line}"; echo ${ADDR[1]})
 	mydate=$(IFS=" " read -ra ADDR <<< "${line}"; echo ${ADDR[0]})
+        myip=${myip//\(/}
+        myip=${myip//\)/}
+
 	END=$(date +%s)
 	dateint="$((END - mydate))"
 	lengthdateint=${#dateint}
 	if (( $lengthdateint > 1)); then
 		D1=$mydate; D2=$END
+
 		datetext=$(echo "$(((D2-D1)/86400)):$(date -u -d@$((D2-D1)) +%H:%M)")
-		sudo echo  "<tr style='background-color:#FF0000'><td>$myhost $myip </td><td>$datetext (d:hh:mm)</td>" >> /var/www/html/live_ipaddress.html
+		sudo echo  "<tr style='background-color:#FF0000'><td> $myhost <a href=http://${myip}>$myip</a> </td><td>$datetext (d:hh:mm)</td>" >> /var/www/html/live_ipaddress.html
 	else
-		sudo echo "<tr><td>$myhost $myip</td><td> 0 mins </td>">> /var/www/html/live_ipaddress.html
+		sudo echo "<tr><td>$myhost <a href=http://${myip}>$myip</a></td><td> 0 mins </td>">> /var/www/html/live_ipaddress.html
 	fi
 done < "$input"
 # PART 2 create web page on the fly
