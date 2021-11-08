@@ -1,0 +1,12 @@
+Intall MYSQL and MQTT on a Raspberry Pi (For proof of concept use test as both the user name and password for the MQTT broker - harden this when you bring this into production) 
+Download this git which contains devices.sql,mqtt mqtt_basic.sh and mqttclient.sh
+Within the MYSQL console create a database , say test.
+On the Linux command line CLI , run sudo mysql test < devices.sql (This creates an empty table devices within the mysql test database)
+
+Next, run the following command in one window of the Pi - mosquitto_sub -h localhost -p 1883 -t '#' -u test -P test -v | ./mqtt_basic.sh 
+On another window run the following ./mqttclient.sh ( This will then update the record in the devices table for your pi 
+What happens is that mqttclient.sh extracts the host name and publishes an MQTT topic. This is detected by the MQTT broker and piped to a script - mqtt_basic.sh.
+mqtt_basic.sh takes the hostname and queries the DB to see if a record with the hostname exists in the devices table.
+If it finds a record exists then it simply updates the lastseen field otherwise it creates a new record
+
+The script is also designed to work natively with Tasmota devices. Simply add your MQTT details to the Tasmota device using the configuration menu.
